@@ -1,0 +1,73 @@
+; PlatformIO Project Configuration File
+;
+;   Build options: build flags, source filter
+;   Upload options: custom upload port, speed and extra flags
+;   Library options: dependencies, extra library storages
+;   Advanced options: extra scripting
+;
+; Please visit documentation for the other options and examples
+; http://docs.platformio.org/page/projectconf.html
+
+[platformio]
+workspace_dir=/tmp/pio-workspaces/$PROJECT_HASH
+default_envs=local
+
+[env]
+platform = espressif8266
+; set frequency to 160MHz
+board_build.f_cpu = 160000000L
+board = nodemcuv2
+framework = arduino
+
+build_flags = 
+       -D BE_MINIMAL 
+       -D PIO_FRAMEWORK_ARDUINO_LWIP2_LOW_MEMORY  
+       -D PIO_FRAMEWORK_ARDUINO_ESPRESSIF_SDK22x_191122 
+       -D BEARSSL_SSL_BASIC   
+       '-DOTAKEY="Wimt3odpodBy"'
+
+lib_deps = fastled/FastLED
+           ruleechen/HomeKit-ESP8266
+           WifiManager
+
+
+[env:local]
+build_flags = ${env.build_flags} 
+        -D NODEMCU -D NUM_LEDS=100
+upload_protocol = esptool
+
+[env:leds]
+build_flags =  ${env.build_flags} 
+        -D WEMOSD1MINI 
+        -D NUM_LEDS=300
+upload_protocol = esptool
+
+[env:ledsota100]
+build_flags =  ${env.build_flags}
+        -D WEMOSD1MINI 
+        -D NUM_LEDS=100
+upload_protocol = espota
+upload_flags =  --auth=ChangeMeNow
+
+[env:ledsota300]
+build_flags =  ${env.build_flags}
+        -D NODEMCU
+        -D NUM_LEDS=300
+upload_protocol = espota
+upload_flags =  --auth=ChangeMeNow
+
+
+[env:strip]
+build_flags =  ${env.build_flags}
+       -D NODEMCU 
+       -D LEDSTRIP  
+       -D NUM_LEDS=300
+upload_protocol = esptool
+
+[env:stripota]
+build_flags =  ${env.build_flags}
+       -D NODEMCU 
+       -D LEDSTRIP  
+       -D NUM_LEDS=300
+upload_protocol = espota
+upload_flags =  --auth=ChangeMeNow
